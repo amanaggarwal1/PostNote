@@ -12,6 +12,5 @@ data class Post(
     val title: String,
     val description: String,
     val date: String,
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    var image:ByteArray
+    val imageUri: String
 ): Serializable

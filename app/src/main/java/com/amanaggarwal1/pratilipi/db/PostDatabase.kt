@@ -1,6 +1,8 @@
 package com.amanaggarwal1.pratilipi.db
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.amanaggarwal1.pratilipi.model.Post
 
@@ -12,8 +14,17 @@ abstract class PostDatabase: RoomDatabase() {
        @Volatile private var instance: PostDatabase? = null
        private val LOCK = Any()
 
-       
+       operator fun invoke(context: Context) = instance?: synchronized(LOCK){
+           instance ?: createDatabase(context).also{
+               instance = it
+           }
+       }
 
+       private fun createDatabase(context: Context) = Room.databaseBuilder(
+           context.applicationContext,
+           PostDatabase::class.java,
+           "posts_database"
+       ).build()
 
-   }
+       }
 }

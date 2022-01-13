@@ -20,5 +20,5 @@ interface DAO {
     fun searchPost(query: String): LiveData<List<Post>>
 
     @Delete
-    suspend fun deletePost(post: Post)
+    fun deletePost(post: Post)
 }
