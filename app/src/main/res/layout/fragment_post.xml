@@ -126,7 +126,8 @@
                             android:clickable="true"
                             android:src="@drawable/ic_baseline_cloud_upload_24"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:focusable="true" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -153,7 +154,7 @@
                         android:fontFamily="@font/google_sans_regular"
                         android:hint="@string/description"
                         android:importantForAutofill="no"
-                        android:inputType="none"
+                        android:inputType="textCapSentences"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="4dp"
                         android:textAlignment="viewStart"
