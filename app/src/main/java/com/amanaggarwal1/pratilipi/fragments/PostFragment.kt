@@ -1,13 +1,17 @@
 package com.amanaggarwal1.pratilipi.fragments
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -28,6 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -129,14 +134,16 @@ class PostFragment : Fragment(R.layout.fragment_post) {
 
     private fun sharePost() {
 
+        val message = "Hey, see my new post!\n" +
+                "${binding.etTitle.text.toString()}\n" +
+                binding.etDescription.text.toString()
         requireView().hideKeyboard()
+
+
         if(postActivityViewModel.imageUri.value == null || postActivityViewModel.imageUri.value.toString() == ""){
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "Hey, see my new post!\n " +
-                        "${binding.etTitle.text.toString()}\n" +
-                        binding.etDescription.text.toString()
-                )
+                putExtra(Intent.EXTRA_TEXT, message)
                 type = "text/plain"
             }
 
@@ -144,11 +151,17 @@ class PostFragment : Fragment(R.layout.fragment_post) {
             startActivity(shareIntent)
         }else {
 
+            val bitmap : Bitmap = binding.imageView.drawable.toBitmap()
+            val bytes = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            val path = MediaStore.Images.Media.insertImage(requireContext().contentResolver, bitmap, "tempimage", null)
+            val uri = Uri.parse(path)
+
             val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "image/jpeg"
+            intent.type = "image/jpg"
             intent.putExtra(Intent.EXTRA_SUBJECT, binding.etTitle.text.toString())
-            intent.putExtra(Intent.EXTRA_TEXT, binding.etDescription.text.toString())
-            intent.putExtra(Intent.EXTRA_STREAM, postActivityViewModel.imageUri.value)
+            intent.putExtra(Intent.EXTRA_TEXT, message)
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             startActivity(Intent.createChooser(intent, "Share via"))
         }
@@ -190,10 +203,6 @@ class PostFragment : Fragment(R.layout.fragment_post) {
         }else {
             Toast.makeText(this.context, "Please add a title", Toast.LENGTH_SHORT).show()
         }
-
-
-
-
     }
 
     private fun updatePost() {
