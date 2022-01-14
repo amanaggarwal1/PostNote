@@ -69,6 +69,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.addPostFab.setOnClickListener{
             binding.appBarLayout.visibility = View.INVISIBLE
+            postActivityViewModel.imageUri.value = null
             navController.navigate(HomeFragmentDirections.actionHomeFragmentToPostFragment())
         }
 

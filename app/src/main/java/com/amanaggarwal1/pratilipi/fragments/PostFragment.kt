@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
@@ -83,6 +84,7 @@ class PostFragment : Fragment(R.layout.fragment_post) {
 
         binding.backBtn.setOnClickListener {
             requireView().hideKeyboard()
+            postActivityViewModel.imageUri.value = null
             navController.popBackStack()
         }
 
@@ -110,26 +112,46 @@ class PostFragment : Fragment(R.layout.fragment_post) {
             image.setImageURI(post.imageUri.toUri())
             postActivityViewModel.imageUri.value = post.imageUri.toUri()
         }
+
     }
 
     private fun uploadImage() {
+        requireView().hideKeyboard()
         ImagePicker.with(this)
             .crop()	    			//Crop image(Optional), Check Customization for more option
             .compress(1024)			//Final image size will be less than 1 MB(Optional)
             //.maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
             .start()
+
+        Log.i("TAG", "title = ${post?.title.toString()}  image = ${postActivityViewModel.imageUri.value.toString()} ")
+
     }
 
     private fun sharePost() {
 
+        requireView().hideKeyboard()
+        if(postActivityViewModel.imageUri.value == null || postActivityViewModel.imageUri.value.toString() == ""){
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "Hey, see my new post!\n " +
+                        "${binding.etTitle.text.toString()}\n" +
+                        binding.etDescription.text.toString()
+                )
+                type = "text/plain"
+            }
 
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "image/jpeg"
-        intent.putExtra(Intent.EXTRA_SUBJECT, binding.etTitle.text.toString())
-        intent.putExtra(Intent.EXTRA_TEXT, binding.etDescription.text.toString())
-        intent.putExtra(Intent.EXTRA_STREAM, postActivityViewModel.imageUri.value)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(Intent.createChooser(intent, "Share via"))
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }else {
+
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/jpeg"
+            intent.putExtra(Intent.EXTRA_SUBJECT, binding.etTitle.text.toString())
+            intent.putExtra(Intent.EXTRA_TEXT, binding.etDescription.text.toString())
+            intent.putExtra(Intent.EXTRA_STREAM, postActivityViewModel.imageUri.value)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivity(Intent.createChooser(intent, "Share via"))
+        }
 
     }
 
