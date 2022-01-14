@@ -13,10 +13,10 @@ interface DAO {
     @Update
     suspend fun updatePost(post: Post)
 
-    @Query("SELECT * FROM Post ORDER BY id DESC")
+    @Query("SELECT * FROM Post ORDER BY date DESC")
     fun getAllPosts(): LiveData<List<Post>>
 
-    @Query("SELECT * FROM post WHERE title LIKE :query OR description LIKE :query OR date LIKE :query ORDER BY id DESC")
+    @Query("SELECT * FROM post WHERE title LIKE :query OR description LIKE :query OR date LIKE :query ORDER BY date DESC")
     fun searchPost(query: String): LiveData<List<Post>>
 
     @Delete
