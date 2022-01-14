@@ -37,11 +37,10 @@ class PostsAdapter: ListAdapter<Post, PostsAdapter.PostViewHolder>(DiffUtilCallb
                     image.setImageURI(post.imageUri.toUri())
                 }
 
-
-                itemView.setOnClickListener{
+                title.setOnClickListener{
                     val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
                         .setPost(post)
-                    val extras = FragmentNavigatorExtras(itemView to "recyclerView_${post.id}")
+                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
                     it.hideKeyboard()
                     Navigation.findNavController(it).navigate(action)
                 }
@@ -49,7 +48,23 @@ class PostsAdapter: ListAdapter<Post, PostsAdapter.PostViewHolder>(DiffUtilCallb
                 description.setOnClickListener{
                     val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
                         .setPost(post)
-                    val extras = FragmentNavigatorExtras(description to "recyclerView_${post.id}")
+                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
+                    it.hideKeyboard()
+                    Navigation.findNavController(it).navigate(action)
+                }
+
+                image.setOnClickListener{
+                    val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
+                        .setPost(post)
+                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
+                    it.hideKeyboard()
+                    Navigation.findNavController(it).navigate(action)
+                }
+
+                date.setOnClickListener{
+                    val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
+                        .setPost(post)
+                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
                     it.hideKeyboard()
                     Navigation.findNavController(it).navigate(action)
                 }

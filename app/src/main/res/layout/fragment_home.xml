@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/purple_700"
                 android:elevation="0dp"
                 android:src="@drawable/ic_round_add_24"
                 app:borderWidth="0dp"
@@ -129,11 +129,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:fontFamily="@font/google_sans_regular"
-                android:paddingStart="0dp"
-                android:paddingEnd="20dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="16dp"
                 android:text="@string/add_post"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-                android:textColor="@color/white" />
+                android:textColor="@color/purple_700" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

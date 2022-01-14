@@ -25,22 +25,4 @@
     <color name="card_green">#34C759</color>
 
 
-    <array name="color_picker">
-        <item>@color/white</item>
-        <item>@color/card_purple</item>
-        <item>@color/card_yellow</item>
-        <item>@color/card_red</item>
-        <item>@color/card_violet</item>
-        <item>@color/card_blue</item>
-        <item>@color/card_green</item>
-        <item>@color/peach</item>
-        <item>@color/green</item>
-        <item>@color/purple</item>
-        <item>@color/darkPurple</item>
-        <item>@color/blue</item>
-        <item>@color/orangeRed</item>
-        <item>@color/yellowOrange</item>
-        <item>@color/MangoTango</item>
-        <item>@color/maizeCrayola</item>
-    </array>
 </resources>

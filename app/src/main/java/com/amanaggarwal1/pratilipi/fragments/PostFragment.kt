@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -107,10 +108,11 @@ class PostFragment : Fragment(R.layout.fragment_post) {
             description.setText(post.description)
             lastEdited.text = getString(R.string.edited_on, post.date)
             image.setImageURI(post.imageUri.toUri())
+            postActivityViewModel.imageUri.value = post.imageUri.toUri()
         }
     }
 
-    fun uploadImage() {
+    private fun uploadImage() {
         ImagePicker.with(this)
             .crop()	    			//Crop image(Optional), Check Customization for more option
             .compress(1024)			//Final image size will be less than 1 MB(Optional)
@@ -132,7 +134,7 @@ class PostFragment : Fragment(R.layout.fragment_post) {
     }
 
     private fun savePost() {
-        if(binding.etTitle.text.toString().isNotEmpty() && binding.etDescription.text.toString().isNotEmpty()){
+        if(binding.etTitle.text.toString().isNotEmpty()){
             post = args.post
             when(post){
                 null -> {
@@ -156,15 +158,18 @@ class PostFragment : Fragment(R.layout.fragment_post) {
                 }
                 else -> {
                     updatePost()
-                    navController.popBackStack()
                 }
 
             }
+            requireView().hideKeyboard()
+            navController.popBackStack()
+            postActivityViewModel.imageUri.value = null
+
+        }else {
+            Toast.makeText(this.context, "Please add a title", Toast.LENGTH_SHORT).show()
         }
 
-        requireView().hideKeyboard()
-        navController.popBackStack()
-        postActivityViewModel.imageUri.value = null
+
 
 
     }
@@ -180,8 +185,8 @@ class PostFragment : Fragment(R.layout.fragment_post) {
         if(post != null){
             postActivityViewModel.updatePost(
                 Post(post!!.id,
-                binding.etTitle.toString(),
-                binding.etDescription.toString(),
+                binding.etTitle.text.toString(),
+                binding.etDescription.text.toString(),
                 currentDate,
                 imageString)
 
