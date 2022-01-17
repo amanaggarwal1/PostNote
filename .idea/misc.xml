@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sarit/AndroidStudioProjects/PostNote/app/src/main/res/layout/activity_main.xml" value="0.16847826086956522" />
+        <entry key="..\:/Users/sarit/AndroidStudioProjects/PostNote/app/src/main/res/layout/fragment_home.xml" value="0.16847826086956522" />
+        <entry key="..\:/Users/sarit/AndroidStudioProjects/PostNote/app/src/main/res/layout/fragment_post.xml" value="0.16847826086956522" />
+        <entry key="..\:/Users/sarit/AndroidStudioProjects/PostNote/app/src/main/res/layout/post_item.xml" value="0.16847826086956522" />
         <entry key="..\:/Users/sarit/AndroidStudioProjects/Pratilipi/app/src/main/res/drawable/date_rounded.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/sarit/AndroidStudioProjects/Pratilipi/app/src/main/res/drawable/fab_btn_corner.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/sarit/AndroidStudioProjects/Pratilipi/app/src/main/res/drawable/ic_baseline_color_lens_24.xml" value="0.26614583333333336" />

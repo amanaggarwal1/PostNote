@@ -52,6 +52,7 @@ class PostFragment : Fragment(R.layout.fragment_post) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // for animation
         val animation = MaterialContainerTransform().apply {
             drawingViewId = R.id.fragment
             scrimColor = Color.TRANSPARENT
@@ -70,29 +71,29 @@ class PostFragment : Fragment(R.layout.fragment_post) {
         binding = FragmentPostBinding.bind(view)
         navController = Navigation.findNavController(view)
 
+        // observing image uri to change image in post
         postActivityViewModel.imageUri.observe(viewLifecycleOwner) {
             binding.imageView.setImageURI(it)
         }
 
+        // click listener for saving post
         binding.savePost.setOnClickListener{
             savePost()
         }
 
+        // click listener for sharing post
         binding.sharePost.setOnClickListener {
             sharePost()
         }
 
-        ViewCompat.setTransitionName(
-            binding.postContentFragmentParent,
-            "recyclerView_${args.post?.id}"
-        )
-
+        // click listener for back button
         binding.backBtn.setOnClickListener {
             requireView().hideKeyboard()
             postActivityViewModel.imageUri.value = null
             navController.popBackStack()
         }
 
+        // click listener for uploading image
         binding.imageUpload.setOnClickListener{
             uploadImage()
         }
@@ -107,9 +108,9 @@ class PostFragment : Fragment(R.layout.fragment_post) {
         val lastEdited = binding.lastEdited
         val image = binding.imageView
 
+        // if it is a new post
         if(post == null){
-            binding.lastEdited.text = getString(R.string.edited_on,
-                SimpleDateFormat.getDateInstance().format(Date()))
+            binding.lastEdited.text = getString(R.string.new_post)
         }else{
             title.setText(post.title)
             description.setText(post.description)
@@ -118,28 +119,33 @@ class PostFragment : Fragment(R.layout.fragment_post) {
             postActivityViewModel.imageUri.value = post.imageUri.toUri()
         }
 
+
+
     }
 
+    // function to upload image in post
     private fun uploadImage() {
         requireView().hideKeyboard()
         ImagePicker.with(this)
-            .crop()	    			//Crop image(Optional), Check Customization for more option
-            .compress(1024)			//Final image size will be less than 1 MB(Optional)
-            //.maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+            .crop()	    			        //Give user option to crop the image
+            .compress(1024)			//Final image size will be less than 1 MB
             .start()
 
         Log.i("TAG", "title = ${post?.title.toString()}  image = ${postActivityViewModel.imageUri.value.toString()} ")
 
     }
 
+    // function to share post using intents
     private fun sharePost() {
 
+        // message to be sent
         val message = "Hey, see my new post!\n" +
                 "${binding.etTitle.text.toString()}\n" +
                 binding.etDescription.text.toString()
         requireView().hideKeyboard()
 
 
+        // sharing only text if there is no image
         if(postActivityViewModel.imageUri.value == null || postActivityViewModel.imageUri.value.toString() == ""){
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -151,6 +157,7 @@ class PostFragment : Fragment(R.layout.fragment_post) {
             startActivity(shareIntent)
         }else {
 
+            // converting image to a bitmap
             val bitmap : Bitmap = binding.imageView.drawable.toBitmap()
             val bytes = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
@@ -168,30 +175,15 @@ class PostFragment : Fragment(R.layout.fragment_post) {
 
     }
 
+    // function to save / update the post
     private fun savePost() {
-        if(binding.etTitle.text.toString().isNotEmpty()){
+        if(binding.etTitle.text.toString().isNotEmpty()){ // save post is title is not empty
             post = args.post
             when(post){
-                null -> {
-                    val imageString = if(postActivityViewModel.imageUri.value == null){
-                        ""
-                    }else{
-                        postActivityViewModel.imageUri.value.toString()
-                    }
-                    postActivityViewModel.savePost(
-                        Post(0,
-                            binding.etTitle.text.toString(),
-                            binding.etDescription.text.toString(),
-                            currentDate,
-                            imageString
-                        )
-                    )
-
-                    result = "Post Saved"
-                    setFragmentResult("key", bundleOf("bundleKey" to result)
-                    )
+                null -> { // if post id is null it means it's a new post
+                    addNewPost()
                 }
-                else -> {
+                else -> { // update existing post
                     updatePost()
                 }
 
@@ -205,6 +197,28 @@ class PostFragment : Fragment(R.layout.fragment_post) {
         }
     }
 
+    // function to add new post
+    private fun addNewPost(){
+        val imageString = if(postActivityViewModel.imageUri.value == null){
+            ""
+        }else{
+            postActivityViewModel.imageUri.value.toString()
+        }
+        postActivityViewModel.savePost(
+            Post(0,
+                binding.etTitle.text.toString(),
+                binding.etDescription.text.toString(),
+                currentDate,
+                imageString
+            )
+        )
+
+        result = "Post Saved"
+        setFragmentResult("key", bundleOf("bundleKey" to result)
+        )
+    }
+
+    // function to update an existing post
     private fun updatePost() {
 
         val imageString = if(postActivityViewModel.imageUri.value == null){
@@ -229,13 +243,8 @@ class PostFragment : Fragment(R.layout.fragment_post) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
-
         postActivityViewModel.imageUri.value = intent?.data
-
-
         binding.imageView.setImageURI(postActivityViewModel.imageUri.value)
-
-
 
     }
 }

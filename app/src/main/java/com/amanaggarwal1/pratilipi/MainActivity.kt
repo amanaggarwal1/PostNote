@@ -19,12 +19,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // hiding default action bar
         supportActionBar?.hide()
         binding = ActivityMainBinding.inflate(layoutInflater)
-
+        setContentView(binding.root)
 
         try{
-            setContentView(binding.root)
+            // creating instance of post repository
             val postRepository = PostRepository(PostDatabase(this))
             val homeFragmentViewModelFactory = PostActivityViewModelFactory(postRepository)
             postActivityViewModel = ViewModelProvider(this,

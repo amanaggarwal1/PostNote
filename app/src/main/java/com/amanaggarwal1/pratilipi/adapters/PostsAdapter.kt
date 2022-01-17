@@ -16,6 +16,7 @@ import com.amanaggarwal1.pratilipi.model.Post
 
 class PostsAdapter: ListAdapter<Post, PostsAdapter.PostViewHolder>(DiffUtilCallback()){
 
+    // function to create view holders
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         return PostViewHolder(
             LayoutInflater.from(parent.context)
@@ -23,6 +24,7 @@ class PostsAdapter: ListAdapter<Post, PostsAdapter.PostViewHolder>(DiffUtilCallb
         )
     }
 
+    // function to bind views and view holders
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         getItem(position).let { post ->
             holder.apply {
@@ -37,34 +39,34 @@ class PostsAdapter: ListAdapter<Post, PostsAdapter.PostViewHolder>(DiffUtilCallb
                     image.setImageURI(post.imageUri.toUri())
                 }
 
+                // click listener for opening posts on clicking on title of post
                 title.setOnClickListener{
                     val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
                         .setPost(post)
-                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
                     it.hideKeyboard()
                     Navigation.findNavController(it).navigate(action)
                 }
 
+                // click listener for opening posts on clicking on title of post
                 description.setOnClickListener{
                     val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
                         .setPost(post)
-                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
                     it.hideKeyboard()
                     Navigation.findNavController(it).navigate(action)
                 }
 
+                // click listener for opening posts on clicking on title of post
                 image.setOnClickListener{
                     val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
                         .setPost(post)
-                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
                     it.hideKeyboard()
                     Navigation.findNavController(it).navigate(action)
                 }
 
+                // click listener for opening posts on clicking on title of post
                 date.setOnClickListener{
                     val action = HomeFragmentDirections.actionHomeFragmentToPostFragment()
                         .setPost(post)
-                    val extras = FragmentNavigatorExtras(it to "recyclerView_${post.id}")
                     it.hideKeyboard()
                     Navigation.findNavController(it).navigate(action)
                 }
