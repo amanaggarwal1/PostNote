@@ -115,8 +115,13 @@ class PostFragment : Fragment(R.layout.fragment_post) {
             title.setText(post.title)
             description.setText(post.description)
             lastEdited.text = getString(R.string.edited_on, post.date)
-            image.setImageURI(post.imageUri.toUri())
-            postActivityViewModel.imageUri.value = post.imageUri.toUri()
+            if(postActivityViewModel.imageUri.value != null &&
+                postActivityViewModel.imageUri.value.toString() != ""){
+                image.setImageURI(postActivityViewModel.imageUri.value)
+            }else {
+                image.setImageURI(post.imageUri.toUri())
+                postActivityViewModel.imageUri.value = post.imageUri.toUri()
+            }
         }
 
 
